@@ -1,2 +1,0 @@
-module NeighborlyBalanced
-end
