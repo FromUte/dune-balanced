@@ -1,4 +1,5 @@
-require "neighborly/balanced/version"
+require 'neighborly/balanced/version'
+require 'balanced'
 
 module Neighborly
   module Balanced
