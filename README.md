@@ -17,13 +17,6 @@ Include this gem as dependency of your project, adding the following line in you
 gem 'neighborly-balanced'
 ```
 
-NeighborlyBalanced is a Rails Engine, integrating with your (Neighborly) Rails application with very little of effort. To turn the engine on, mount it in an appropriate route:
-
-```ruby
-# config/routes.rb
-mount Neighborly::Balanced::Engine => '/', as: 'neighborly_balanced'
-```
-
 As you might know, Neighborly has a `Configuration` class, responsible to... project's configuration. You need to set API key secret and Marketplace ID, and you find yours acessing settings of [Balanced Dashboard](https://dashboard.balancedpayments.com/).
 
 ```console
