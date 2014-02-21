@@ -1,5 +1,7 @@
 # Neighborly::Balanced
 
+[![Build Status](https://travis-ci.org/neighborly/neighborly-balanced.png?branch=master)](https://travis-ci.org/neighborly/neighborly-balanced) [![Code Climate](https://codeclimate.com/github/neighborly/neighborly-balanced.png)](https://codeclimate.com/github/neighborly/neighborly-balanced)
+
 ## UNDER ACTIVE DEVELOPMENT
 
 This won't work for now. Feel free to follow the project and contribute, but it's not ready for production.
