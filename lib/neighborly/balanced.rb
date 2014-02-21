@@ -1,3 +1,4 @@
+require 'neighborly/balanced/engine'
 require 'neighborly/balanced/version'
 require 'balanced'
 
