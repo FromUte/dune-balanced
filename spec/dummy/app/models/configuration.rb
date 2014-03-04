@@ -1,4 +1,3 @@
 class Configuration
-  def self.fetch(key)
-  end
+  def self.[](*); end
 end
