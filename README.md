@@ -19,6 +19,12 @@ Include this gem as dependency of your project, adding the following line in you
 gem 'neighborly-balanced'
 ```
 
+And install the migrations:
+
+```console
+$ bundle exec rake railties:install:migrations db:migrate
+```
+
 As you might know, Neighborly has a `Configuration` class, responsible to... project's configuration. You need to set API key secret and Marketplace ID, and you find yours acessing settings of [Balanced Dashboard](https://dashboard.balancedpayments.com/).
 
 ```console
