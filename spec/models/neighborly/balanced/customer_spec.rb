@@ -2,15 +2,13 @@ require 'spec_helper'
 
 describe Neighborly::Balanced::Customer do
   let(:user)    { double('User').as_null_object }
-  let(:update_address) { '1' }
   let(:params)  { ActionController::Parameters.new( {
                   payment: {
                      user: { name:              'Name',
                              address_street:    '',
                              address_city:      '',
                              address_state:     '',
-                             address_zip_code:  '',
-                             update_address:    update_address } }
+                             address_zip_code:  '' } }
   } ) }
 
   let(:balanced_customer) do
@@ -58,20 +56,9 @@ describe Neighborly::Balanced::Customer do
 
     describe '#update!' do
       describe 'update of user attributes' do
-        context "when update_address option is checked" do
-          let(:update_address) { '1' }
-          it "reflects attributes in user's resource " do
-            expect(user).to receive(:update!)
-            subject.update!
-          end
-        end
-
-        context "when update_address option is not checked" do
-          let(:update_address) { '0' }
-          it "skips update of user's resource" do
-            expect(user).to_not receive(:update!)
-            subject.update!
-          end
+        it "reflects attributes in user's resource " do
+          expect(user).to receive(:update!)
+          subject.update!
         end
       end
 

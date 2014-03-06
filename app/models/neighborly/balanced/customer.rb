@@ -23,10 +23,7 @@ module Neighborly::Balanced
                          postal_code:  user_params[:address_zip_code]
                        }
       fetch.save
-
-      if ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES.include? user_params.delete(:update_address)
-        @user.update!(user_params)
-      end
+      @user.update!(user_params)
     end
 
     private
@@ -53,7 +50,6 @@ module Neighborly::Balanced
                                              address_city
                                              address_state
                                              address_zip_code
-                                             update_address
                                            )])[:payment][:user]
     end
   end
