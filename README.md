@@ -40,7 +40,8 @@ $ rails runner "Configuration.create!(name: 'balanced_marketplace_id', value: 'Y
 
 We prize for our test suite and coverage, so it would be great if you could run the specs to ensure that your patch is not breaking the existing codebase.
 
-`bundle exec rspec`
+```
+bundle exec rspec
 ```
 
 ## License
