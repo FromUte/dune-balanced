@@ -2,10 +2,6 @@
 
 [![Build Status](https://travis-ci.org/neighborly/neighborly-balanced.png?branch=master)](https://travis-ci.org/neighborly/neighborly-balanced) [![Code Climate](https://codeclimate.com/github/neighborly/neighborly-balanced.png)](https://codeclimate.com/github/neighborly/neighborly-balanced)
 
-## UNDER ACTIVE DEVELOPMENT
-
-This won't work for now. Feel free to follow the project and contribute, but it's not ready for production.
-
 ## What
 
 This is an integration between [Balanced](https://www.balancedpayments.com/) and [Neighborly](https://github.com/luminopolis/neighborly), a crowdfunding platform.
@@ -32,4 +28,19 @@ $ rails runner "Configuration.create!(name: 'balanced_api_key_secret', value: 'Y
 $ rails runner "Configuration.create!(name: 'balanced_marketplace_id', value: 'YOUR_MARKETPLACE_ID_HERE')"
 ```
 
-**to be continued**
+## Running tests
+
+	`bundle exec rspec`
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+
+# License
+
+Licensed under the [MIT license](LICENSE.txt).
