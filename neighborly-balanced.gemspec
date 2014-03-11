@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Irio Musskopf', 'Josemar Luedke']
   spec.email         = %w(iirineu@gmail.com josemarluedke@gmail.com)
   spec.summary       = 'Neighbor.ly integration with Balanced Payments.'
-  spec.description   = 'Neighbor.ly integration with Balanced Payments.'
+  spec.description   = 'This is the base to integrate Balanced Payments on Neighbor.ly'
   spec.homepage      = 'https://github.com/neighborly/neighborly-balanced'
   spec.license       = 'MIT'
 
@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'rails', '~> 4.0'
-  spec.add_dependency 'balanced', '~> 0.7.5'
-  spec.add_development_dependency 'rspec-rails'
-  spec.add_development_dependency 'sqlite3'
+  spec.add_dependency 'balanced', '~> 0.7'
+  spec.add_development_dependency 'rspec-rails', '~> 2.14'
+  spec.add_development_dependency 'sqlite3', '~> 1.3'
 end

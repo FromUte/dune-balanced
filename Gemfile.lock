@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    neighborly-balanced (0.0.1)
-      balanced (~> 0.7.5)
+    neighborly-balanced (1.0.0)
+      balanced (~> 0.7)
       rails (~> 4.0)
 
 GEM
@@ -107,5 +107,5 @@ PLATFORMS
 
 DEPENDENCIES
   neighborly-balanced!
-  rspec-rails
-  sqlite3
+  rspec-rails (~> 2.14)
+  sqlite3 (~> 1.3)
