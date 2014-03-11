@@ -28,10 +28,6 @@ $ rails runner "Configuration.create!(name: 'balanced_api_key_secret', value: 'Y
 $ rails runner "Configuration.create!(name: 'balanced_marketplace_id', value: 'YOUR_MARKETPLACE_ID_HERE')"
 ```
 
-## Running tests
-
-	`bundle exec rspec`
-
 ## Contributing
 
 1. Fork it
@@ -40,7 +36,13 @@ $ rails runner "Configuration.create!(name: 'balanced_marketplace_id', value: 'Y
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
+### Running specs
 
-# License
+We prize for our test suite and coverage, so it would be great if you could run the specs to ensure that your patch is not breaking the existing codebase.
+
+`bundle exec rspec`
+```
+
+## License
 
 Licensed under the [MIT license](LICENSE.txt).
