@@ -44,13 +44,13 @@ describe Neighborly::Balanced::Event do
 
     it "creates a new payment notification" do
       subject.stub(:contribution).and_return(contribution)
-      expect(PaymentEngines).to receive(:create_payment_notification).
+      expect(PaymentEngine).to receive(:create_payment_notification).
         with(hash_including(contribution_id: contribution.id))
       subject.save
     end
 
     it "stores metadata of event" do
-      expect(PaymentEngines).to receive(:create_payment_notification).
+      expect(PaymentEngine).to receive(:create_payment_notification).
         with(hash_including(:extra_data))
       subject.save
     end
@@ -64,13 +64,13 @@ describe Neighborly::Balanced::Event do
 
     it "creates a new payment notification" do
       subject.stub(:contribution).and_return(contribution)
-      expect(PaymentEngines).to receive(:create_payment_notification).
+      expect(PaymentEngine).to receive(:create_payment_notification).
         with(hash_including(contribution_id: contribution.id))
       subject.save
     end
 
     it "stores metadata of event" do
-      expect(PaymentEngines).to receive(:create_payment_notification).
+      expect(PaymentEngine).to receive(:create_payment_notification).
         with(hash_including(:extra_data))
       subject.save
     end
