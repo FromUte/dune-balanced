@@ -75,4 +75,24 @@ describe Neighborly::Balanced::Event do
       subject.save
     end
   end
+
+  context "with bank_account_verification.deposited params" do
+    let(:params) do
+      fixture = Rails.root.join('..', '..', 'spec', 'fixtures', 'notifications', 'bank_account_verification_deposited.yml')
+      YAML.load(File.read(fixture)).with_indifferent_access
+    end
+
+    it "creates a new payment notification" do
+      subject.stub(:contribution).and_return(contribution)
+      expect(PaymentEngine).to receive(:create_payment_notification).
+        with(hash_including(contribution_id: contribution.id))
+      subject.save
+    end
+
+    it "stores metadata of event" do
+      expect(PaymentEngine).to receive(:create_payment_notification).
+        with(hash_including(:extra_data))
+      subject.save
+    end
+  end
 end

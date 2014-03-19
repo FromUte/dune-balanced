@@ -1,6 +1,8 @@
 module Neighborly::Balanced
   class Event
-    TYPES = %w(debit.created debit.succeeded)
+    TYPES = %w(debit.created
+               debit.succeeded
+               bank_account_verification.deposited)
 
     def initialize(request_params)
       @request_params = request_params
