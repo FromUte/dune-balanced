@@ -1,7 +1,7 @@
 module Neighborly::Balanced
   class NotificationsController < ApplicationController
     def create
-      event = Neighborly::Balanced::Event.new(params)
+      event = Event.new(params)
       event.save
 
       status = event.valid? ? :ok : :bad_request
