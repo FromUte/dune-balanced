@@ -21,6 +21,13 @@ And install the migrations:
 $ bundle exec rake railties:install:migrations db:migrate
 ```
 
+Neighborly::Balanced is a Rails Engine, integrating with your (Neighborly) Rails application with very little of effort. To turn the engine on, mount it in an appropriate route:
+
+```ruby
+# config/routes.rb
+mount Neighborly::Balanced::Engine => '/balanced/', as: :neighborly_balanced
+```
+
 As you might know, Neighborly has a `Configuration` class, responsible to... project's configuration. You need to set API key secret and Marketplace ID, and you find yours acessing settings of [Balanced Dashboard](https://dashboard.balancedpayments.com/).
 
 ```console
