@@ -37,7 +37,7 @@ $ rails runner "Configuration.create!(name: 'balanced_marketplace_id', value: 'Y
 
 ### Balanced Webhook
 
-Balanced has a webhook that allow us to receive notifications of events that happen there. We execute a few things when certain evens occurs, so you need to add on Balanced Settings the webhook with the following URL:
+Balanced has a webhook that allow us to receive notifications of events that happen there. We execute a few things when certain events occurs, so you need to add on [Balanced Settings](https://dashboard.balancedpayments.com) the webhook with the following URL:
 
 `http://my-neighborly.com/balanced/notifications`
 
