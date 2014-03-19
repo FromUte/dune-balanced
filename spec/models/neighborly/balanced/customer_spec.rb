@@ -25,7 +25,7 @@ describe Neighborly::Balanced::Customer do
   describe '#fetch' do
     context 'when user already has a balanced_contributor associated' do
       before do
-        contributor = double('Neighborly::Balanced::Creditcard::Contributor',
+        contributor = double('Neighborly::Balanced::Contributor',
                              uri: '/qwertyuiop')
         user.stub(:balanced_contributor).
                   and_return(contributor)
