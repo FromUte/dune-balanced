@@ -35,6 +35,12 @@ $ rails runner "Configuration.create!(name: 'balanced_api_key_secret', value: 'Y
 $ rails runner "Configuration.create!(name: 'balanced_marketplace_id', value: 'YOUR_MARKETPLACE_ID_HERE')"
 ```
 
+### Balanced Webhook
+
+Balanced has a webhook that allow us to receive notifications of events that happen there. We execute a few things when certain evens occurs, so you need to add on Balanced Settings the webhook with the following URL:
+
+`http://my-neighborly.com/balanced/notifications`
+
 ## Contributing
 
 1. Fork it
