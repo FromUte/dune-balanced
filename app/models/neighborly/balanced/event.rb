@@ -7,7 +7,7 @@ module Neighborly::Balanced
     end
 
     def save
-      PaymentEngines.create_payment_notification(
+      PaymentEngine.create_payment_notification(
         contribution_id: contribution.id,
         extra_data:      @request_params[:registration].to_json
       )
