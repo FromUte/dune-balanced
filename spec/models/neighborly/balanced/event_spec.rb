@@ -6,6 +6,10 @@ describe Neighborly::Balanced::Event do
   let(:params)            { attributes_for_notification(notification_type) }
   subject { described_class.new(params) }
 
+  it 'gets the type from request params' do
+    expect(subject.type).to eql('debit.created')
+  end
+
   describe "validability" do
     before { subject.stub(:contribution).and_return(contribution) }
 

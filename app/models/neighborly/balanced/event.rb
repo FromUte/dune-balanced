@@ -37,11 +37,11 @@ module Neighborly::Balanced
       Contribution.find_by(payment_id: @request_params.fetch(:entity).fetch(:id))
     end
 
-    protected
-
     def type
       @request_params.fetch(:type)
     end
+
+    protected
 
     def valid_type?
       TYPES.include? type
