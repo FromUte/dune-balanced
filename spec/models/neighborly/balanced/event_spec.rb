@@ -55,6 +55,16 @@ describe Neighborly::Balanced::Event do
         with(hash_including(:extra_data))
       subject.save
     end
+
+    it 'sets as changed for observers' do
+      expect(described_class).to receive(:changed)
+      subject.save
+    end
+
+    it 'notifies observers' do
+      expect(described_class).to receive(:notify_observers).with(subject)
+      subject.save
+    end
   end
 
   context 'with debit.created params' do

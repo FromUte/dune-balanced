@@ -1,5 +1,9 @@
+require 'observer'
+
 module Neighborly::Balanced
   class Event
+    extend Observable
+
     TYPES = %w(debit.created
                debit.succeeded
                bank_account_verification.deposited)
@@ -13,6 +17,9 @@ module Neighborly::Balanced
         contribution_id: contribution.id,
         extra_data:      @request_params[:registration].to_json
       )
+
+      self.class.changed
+      self.class.notify_observers(self)
     end
 
     def valid?
