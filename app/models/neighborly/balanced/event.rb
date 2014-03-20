@@ -16,7 +16,14 @@ module Neighborly::Balanced
     end
 
     def valid?
-      valid_type? && values_matches?
+      valid_type? or return false
+
+      {
+        'debit.created'                       => -> { values_matches? },
+        'debit.succeeded'                     => -> { values_matches? },
+        # Skip validation of this type
+        'bank_account_verification.deposited' => -> { true }
+      }.fetch(type).call
     end
 
     def contribution
@@ -25,8 +32,12 @@ module Neighborly::Balanced
 
     protected
 
+    def type
+      @request_params.fetch(:type)
+    end
+
     def valid_type?
-      TYPES.include? @request_params.fetch(:type)
+      TYPES.include? type
     end
 
     def values_matches?

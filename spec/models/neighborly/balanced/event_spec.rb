@@ -32,6 +32,14 @@ describe Neighborly::Balanced::Event do
 
       it { should_not be_valid }
     end
+
+    context 'with \'bank_account_verification.deposited\'' do
+      let(:notification_type) do
+        'bank_account_verification.deposited'
+      end
+
+      it { should be_valid }
+    end
   end
 
   shared_examples 'storing payment notification' do
