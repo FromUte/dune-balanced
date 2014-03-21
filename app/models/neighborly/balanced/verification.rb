@@ -1,5 +1,7 @@
 module Neighborly::Balanced
   class Verification
+    delegate :user, to: :contributor
+
     def self.find(uri)
       new(::Balanced::Verification.find(uri))
     end
@@ -14,6 +16,10 @@ module Neighborly::Balanced
 
     def bank_account_uri
       uri.match(/\A(?<bank_account_uri>.+)\/verifications/)[:bank_account_uri]
+    end
+
+    def contributor
+      Contributor.find_by(bank_account_uri: bank_account_uri)
     end
 
     # Delegate instance methods to Balanced::Verification object
