@@ -1,6 +1,12 @@
+require 'observer'
+
 module Neighborly::Balanced
   class Event
-    TYPES = %w(debit.created debit.succeeded)
+    extend Observable
+
+    TYPES = %w(debit.created
+               debit.succeeded
+               bank_account_verification.deposited)
 
     def initialize(request_params)
       @request_params = request_params
@@ -11,20 +17,34 @@ module Neighborly::Balanced
         contribution_id: contribution.id,
         extra_data:      @request_params[:registration].to_json
       )
+
+      self.class.changed
+      self.class.notify_observers(self)
     end
 
     def valid?
-      valid_type? && values_matches?
+      valid_type? or return false
+
+      {
+        'debit.created'                       => -> { values_matches? },
+        'debit.succeeded'                     => -> { values_matches? },
+        # Skip validation of this type
+        'bank_account_verification.deposited' => -> { true }
+      }.fetch(type).call
     end
 
     def contribution
       Contribution.find_by(payment_id: @request_params.fetch(:entity).fetch(:id))
     end
 
+    def type
+      @request_params.fetch(:type)
+    end
+
     protected
 
     def valid_type?
-      TYPES.include? @request_params.fetch(:type)
+      TYPES.include? type
     end
 
     def values_matches?

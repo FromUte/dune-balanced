@@ -1,11 +1,13 @@
 require 'spec_helper'
 
 describe Neighborly::Balanced::Event do
+  let(:contribution)      { double('Contribution', id: 49) }
+  let(:notification_type) { 'debit.created' }
+  let(:params)            { attributes_for_notification(notification_type) }
   subject { described_class.new(params) }
-  let(:contribution) { double('Contribution', id: 49) }
-  let(:params) do
-    fixture = Rails.root.join('..', '..', 'spec', 'fixtures', 'notifications', 'debit_created.yml')
-    YAML.load(File.read(fixture)).with_indifferent_access
+
+  it 'gets the type from request params' do
+    expect(subject.type).to eql('debit.created')
   end
 
   describe "validability" do
@@ -34,45 +36,56 @@ describe Neighborly::Balanced::Event do
 
       it { should_not be_valid }
     end
+
+    context 'with \'bank_account_verification.deposited\'' do
+      let(:notification_type) do
+        'bank_account_verification.deposited'
+      end
+
+      it { should be_valid }
+    end
   end
 
-  context "with debit.created params" do
-    let(:params) do
-      fixture = Rails.root.join('..', '..', 'spec', 'fixtures', 'notifications', 'debit_created.yml')
-      YAML.load(File.read(fixture)).with_indifferent_access
-    end
-
-    it "creates a new payment notification" do
+  shared_examples 'storing payment notification' do
+    it 'creates a new payment notification' do
       subject.stub(:contribution).and_return(contribution)
       expect(PaymentEngine).to receive(:create_payment_notification).
         with(hash_including(contribution_id: contribution.id))
       subject.save
     end
 
-    it "stores metadata of event" do
+    it 'stores metadata of event' do
       expect(PaymentEngine).to receive(:create_payment_notification).
         with(hash_including(:extra_data))
+      subject.save
+    end
+
+    it 'sets as changed for observers' do
+      expect(described_class).to receive(:changed)
+      subject.save
+    end
+
+    it 'notifies observers' do
+      expect(described_class).to receive(:notify_observers).with(subject)
       subject.save
     end
   end
 
-  context "with debit.succeeded params" do
-    let(:params) do
-      fixture = Rails.root.join('..', '..', 'spec', 'fixtures', 'notifications', 'debit_succeeded.yml')
-      YAML.load(File.read(fixture)).with_indifferent_access
-    end
+  context 'with debit.created params' do
+    let(:notification_type) { 'debit.created' }
 
-    it "creates a new payment notification" do
-      subject.stub(:contribution).and_return(contribution)
-      expect(PaymentEngine).to receive(:create_payment_notification).
-        with(hash_including(contribution_id: contribution.id))
-      subject.save
-    end
+    it_behaves_like 'storing payment notification'
+  end
 
-    it "stores metadata of event" do
-      expect(PaymentEngine).to receive(:create_payment_notification).
-        with(hash_including(:extra_data))
-      subject.save
-    end
+  context 'with debit.succeeded params' do
+    let(:notification_type) { 'debit.succeeded' }
+
+    it_behaves_like 'storing payment notification'
+  end
+
+  context 'with bank_account_verification.deposited params' do
+    let(:notification_type) { 'bank_account_verification.deposited' }
+
+    it_behaves_like 'storing payment notification'
   end
 end
