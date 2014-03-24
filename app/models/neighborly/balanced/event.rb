@@ -28,6 +28,7 @@ module Neighborly::Balanced
       {
         'debit.created'                       => -> { values_matches? },
         'debit.succeeded'                     => -> { values_matches? },
+        'debit.canceled'                      => -> { values_matches? },
         # Skip validation of this type
         'bank_account_verification.deposited' => -> { true }
       }.fetch(type).call
