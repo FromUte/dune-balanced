@@ -114,5 +114,5 @@ registration:
     retrying: 0
     succeeded: 0
     pending: 1
-  type: debit.succeeded
+  type: debit.canceled
   id: EV71b24f249d8111e38b4e026ba7c1aba6
