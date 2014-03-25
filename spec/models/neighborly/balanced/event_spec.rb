@@ -88,4 +88,10 @@ describe Neighborly::Balanced::Event do
 
     it_behaves_like 'storing payment notification'
   end
+
+  context 'with debit.canceled params' do
+    let(:notification_type) { 'debit.canceled' }
+
+    it_behaves_like 'storing payment notification'
+  end
 end
