@@ -6,6 +6,7 @@ module Neighborly::Balanced
 
     TYPES = %w(debit.created
                debit.succeeded
+               bank_account_verification.verified
                bank_account_verification.deposited)
 
     def initialize(request_params)
@@ -28,8 +29,9 @@ module Neighborly::Balanced
       {
         'debit.created'                       => -> { values_matches? },
         'debit.succeeded'                     => -> { values_matches? },
-        # Skip validation of this type
-        'bank_account_verification.deposited' => -> { true }
+        # Skip validation for these types
+        'bank_account_verification.deposited' => -> { true },
+        'bank_account_verification.verified'  => -> { true }
       }.fetch(type).call
     end
 
