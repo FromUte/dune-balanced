@@ -44,6 +44,14 @@ describe Neighborly::Balanced::Event do
 
       it { should be_valid }
     end
+
+    context 'with \'bank_account_verification.verified\'' do
+      let(:notification_type) do
+        'bank_account_verification.verified'
+      end
+
+      it { should be_valid }
+    end
   end
 
   shared_examples 'storing payment notification' do
@@ -91,6 +99,12 @@ describe Neighborly::Balanced::Event do
 
   context 'with debit.canceled params' do
     let(:notification_type) { 'debit.canceled' }
+
+    it_behaves_like 'storing payment notification'
+  end
+
+  context 'with bank_account_verification.verified params' do
+    let(:notification_type) { 'bank_account_verification.verified' }
 
     it_behaves_like 'storing payment notification'
   end
