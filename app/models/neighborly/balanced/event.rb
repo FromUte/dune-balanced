@@ -14,10 +14,12 @@ module Neighborly::Balanced
     end
 
     def save
-      PaymentEngine.create_payment_notification(
-        contribution_id: contribution.id,
-        extra_data:      @request_params[:registration].to_json
-      )
+      if contribution.present?
+        PaymentEngine.create_payment_notification(
+          contribution_id: contribution.id,
+          extra_data:      @request_params[:registration].to_json
+        )
+      end
 
       self.class.changed
       self.class.notify_observers(self)
