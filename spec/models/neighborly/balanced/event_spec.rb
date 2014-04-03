@@ -11,7 +11,7 @@ describe Neighborly::Balanced::Event do
   end
 
   it 'gets the entity uri from request params' do
-    expect(subject.entity_uri).to eql('/events/EV70d1498e9d8111e3beb0026ba7cd33d0/callbacks/CB73FAvbywO7iCB7YyiECmA6')
+    expect(subject.entity_uri).to eql('/v1/marketplaces/TEST-MP24PC81sknFKEuhffrbAixq/debits/WD3q99CpFnVTDWMgfXpiC2Mo')
   end
 
   describe "validability" do
