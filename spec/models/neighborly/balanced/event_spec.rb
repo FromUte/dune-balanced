@@ -10,6 +10,10 @@ describe Neighborly::Balanced::Event do
     expect(subject.type).to eql('debit.created')
   end
 
+  it 'gets the entity uri from request params' do
+    expect(subject.entity_uri).to eql('/events/EV70d1498e9d8111e3beb0026ba7cd33d0/callbacks/CB73FAvbywO7iCB7YyiECmA6')
+  end
+
   describe "validability" do
     before { subject.stub(:contribution).and_return(contribution) }
 

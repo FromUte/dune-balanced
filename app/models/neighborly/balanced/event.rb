@@ -46,6 +46,10 @@ module Neighborly::Balanced
       @request_params.fetch(:type)
     end
 
+    def entity_uri
+      @request_params.fetch(:entity).fetch(:uri)
+    end
+
     protected
 
     def valid_type?
