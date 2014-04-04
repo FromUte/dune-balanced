@@ -39,6 +39,8 @@ module Neighborly::Balanced
     end
 
     def contribution
+      return false unless @request_params.try(:[], :entity).try(:[], :id)
+
       Contribution.find_by(payment_id: @request_params.fetch(:entity).fetch(:id))
     end
 
