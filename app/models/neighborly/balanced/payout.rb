@@ -3,9 +3,10 @@ module Neighborly::Balanced
   class NoBankAccount < Error;         end
 
   class Payout
-    def initialize(neighborly_customer, project)
-      @customer = neighborly_customer
-      @project  = project
+    def initialize(neighborly_customer, project, requestor_user)
+      @customer  = neighborly_customer
+      @project   = project
+      @requestor = requestor_user
     end
 
     def complete!
@@ -14,6 +15,12 @@ module Neighborly::Balanced
       end
 
       customer.credit(amount: amount_in_cents)
+      ::Payout.create(
+        payment_service: 'balanced',
+        project_id:      @project,
+        user_id:         @requestor,
+        value:           amount
+      )
     end
 
     def amount

@@ -7,8 +7,10 @@ describe Neighborly::Balanced::Payout do
   let(:neighborly_customer) do
     double('Neighborly::Balanced::Customer').as_null_object
   end
-  subject { described_class.new(neighborly_customer, project) }
-  before { subject.stub(:amount).and_return(BigDecimal.new(100)) }
+  let(:amount)    { BigDecimal.new(100) }
+  let(:requestor) { double('User') }
+  subject { described_class.new(neighborly_customer, project, requestor) }
+  before { subject.stub(:amount).and_return(amount) }
 
   describe "completion" do
     before do
@@ -22,6 +24,31 @@ describe Neighborly::Balanced::Payout do
       it "credits the amount (in cents) to costumer's account" do
         expect(neighborly_customer).to receive(:credit).with(hash_including(amount: 10000))
         subject.complete!
+      end
+
+      context 'with successful credit' do
+        it 'logs the payout' do
+          expect(::Payout).to receive(:create).
+            with(hash_including(
+              payment_service: 'balanced',
+              project_id:      project,
+              user_id:         requestor,
+              value:           amount))
+            subject.complete!
+        end
+      end
+
+      context 'with unsuccessful credit' do
+        before do
+          neighborly_customer.
+            stub(:credit).
+            and_raise(Balanced::Conflict.new({}))
+        end
+
+        it 'skips payout logging' do
+          expect(::Payout).to_not receive(:create)
+          subject.complete! rescue Balanced::Conflict
+        end
       end
     end
 
