@@ -3,8 +3,7 @@ module Neighborly::Balanced
   class NoBankAccount < Error;         end
 
   class Payout
-    def initialize(neighborly_customer, project, requestor_user)
-      @customer  = neighborly_customer
+    def initialize(project, requestor_user)
       @project   = project
       @requestor = requestor_user
     end
@@ -31,7 +30,11 @@ module Neighborly::Balanced
     end
 
     def customer
-      @customer.fetch
+      neighborly_customer.fetch
+    end
+
+    def neighborly_customer
+      @neighborly_customer ||= Neighborly::Balanced::Customer.new(@project.user, {})
     end
 
     protected

@@ -9,8 +9,11 @@ describe Neighborly::Balanced::Payout do
   end
   let(:amount)    { BigDecimal.new(100) }
   let(:requestor) { double('User') }
-  subject { described_class.new(neighborly_customer, project, requestor) }
-  before { subject.stub(:amount).and_return(amount) }
+  subject { described_class.new(project, requestor) }
+  before do
+    subject.stub(:amount).and_return(amount)
+    subject.stub(:neighborly_customer).and_return(neighborly_customer)
+  end
 
   describe "completion" do
     before do
