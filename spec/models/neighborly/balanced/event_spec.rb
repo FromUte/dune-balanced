@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Neighborly::Balanced::Event do
   let(:contribution)      { double('Contribution', id: 49) }
+  let(:user)              { double('User') }
+  let(:contributor)       { double('Neighborly::Balanced::Contributor', user: user) }
   let(:notification_type) { 'debit.created' }
   let(:params)            { attributes_for_notification(notification_type) }
   subject { described_class.new(params) }
@@ -99,6 +101,19 @@ describe Neighborly::Balanced::Event do
     let(:notification_type) { 'bank_account_verification.deposited' }
 
     it_behaves_like 'storing payment notification'
+
+    it 'gets its contributor from request params' do
+      Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('QWERTY')
+      Neighborly::Balanced::Contributor.stub(:find_by).
+        with(bank_account_uri: '/v1/marketplaces/QWERTY/bank_accounts/BAPGUSU1HHB5kWPcBmnxEq6').
+        and_return(contributor)
+      expect(subject.contributor).to eql(contributor)
+    end
+
+    it 'gets its user from request params' do
+      subject.stub(:contributor).and_return(contributor)
+      expect(subject.user).to eql(user)
+    end
   end
 
   context 'with debit.canceled params' do
@@ -111,5 +126,18 @@ describe Neighborly::Balanced::Event do
     let(:notification_type) { 'bank_account_verification.verified' }
 
     it_behaves_like 'storing payment notification'
+
+    it 'gets its contributor from request params' do
+      Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('QWERTY')
+      Neighborly::Balanced::Contributor.stub(:find_by).
+        with(bank_account_uri: '/v1/marketplaces/QWERTY/bank_accounts/BA4xYXDZ7vv62KvVAlgtRIXd').
+        and_return(contributor)
+      expect(subject.contributor).to eql(contributor)
+    end
+
+    it 'gets its user from request params' do
+      subject.stub(:contributor).and_return(contributor)
+      expect(subject.user).to eql(user)
+    end
   end
 end

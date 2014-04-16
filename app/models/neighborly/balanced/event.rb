@@ -52,6 +52,14 @@ module Neighborly::Balanced
       @request_params.fetch(:entity).fetch(:uri)
     end
 
+    def contributor
+      Neighborly::Balanced::Contributor.find_by(bank_account_uri: bank_account_uri)
+    end
+
+    def user
+      contributor.try(:user) || contribution.try(:user)
+    end
+
     protected
 
     def valid_type?
@@ -64,6 +72,18 @@ module Neighborly::Balanced
 
     def payment_amount
       @request_params.fetch(:entity).fetch(:amount).to_i
+    end
+
+    def verification?
+      !!type['bank_account_verification']
+    end
+
+    def bank_account_uri
+      if verification?
+        uri = entity_uri.match(/\A(?<bank_account_uri>\/.+\/bank_accounts\/.+)\/verifications/)[:bank_account_uri]
+        uri['/bank_accounts'] = "/marketplaces/#{Configuration[:balanced_marketplace_id]}/bank_accounts"
+        uri
+      end
     end
   end
 end
