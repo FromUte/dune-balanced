@@ -28,7 +28,7 @@ Neighborly::Balanced is a Rails Engine, integrating with your (Neighborly) Rails
 mount Neighborly::Balanced::Engine => '/balanced/', as: :neighborly_balanced
 ```
 
-As you might know, Neighborly has a `Configuration` class, responsible to... project's configuration. You need to set API key secret and Marketplace ID, and you find yours acessing settings of [Balanced Dashboard](https://dashboard.balancedpayments.com/). Also you need to inform how the bebit will appears on the statement.
+As you might know, Neighborly has a `Configuration` class, responsible to... project's configuration. You need to set API key secret and Marketplace ID, and you find yours acessing settings of [Balanced Dashboard](https://dashboard.balancedpayments.com/). Also you need to inform how the debit will appears on the statement.
 
 ```console
 $ rails runner "Configuration.create!(name: 'balanced_api_key_secret', value: 'YOUR_API_KEY_SECRET_HERE')"
