@@ -18,9 +18,14 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'balanced', '~> 0.7'
-  spec.add_dependency 'draper',   '~> 1.3'
-  spec.add_dependency 'rails',    '~> 4.0'
+  # faraday_middleware 0.9.1 is raising
+  # NoMethodError: undefined method `register_middleware' for #<Faraday::Connection:0x00000002ebc178>
+  spec.add_dependency 'faraday',            '0.8.9'
+  spec.add_dependency 'faraday_middleware', '0.9.0'
+
+  spec.add_dependency 'balanced',           '~> 0.8.0'
+  spec.add_dependency 'draper',             '~> 1.3'
+  spec.add_dependency 'rails',              '~> 4.0'
   spec.add_development_dependency 'rspec-rails', '~> 2.14'
   spec.add_development_dependency 'sqlite3', '~> 1.3'
 end
