@@ -60,11 +60,11 @@ describe Neighborly::Balanced::Event do
   end
 
   shared_examples 'eventable' do
-    describe "validability" do
+    describe 'validability' do
       before { subject.stub(:resource).and_return(resource) }
 
-      context "when resource exists" do
-        context "when its value and payment matches" do
+      context 'when resource exists' do
+        context 'when its value and payment matches' do
           before do
             resource.stub(:price_in_cents).and_return(params[:entity][:amount].to_i)
           end
@@ -72,7 +72,7 @@ describe Neighborly::Balanced::Event do
           it { should be_valid }
         end
 
-        context "when value does not match with payment" do
+        context 'when value does not match with payment' do
           before do
             resource.stub(:price_in_cents).and_return((params[:entity][:amount]+1).to_i)
           end
@@ -81,7 +81,7 @@ describe Neighborly::Balanced::Event do
         end
       end
 
-      context "when no resource does not exist" do
+      context 'when no resource does not exist' do
         let(:resource) { nil }
 
         it { should_not be_valid }
