@@ -42,7 +42,11 @@ module Neighborly::Balanced
     def resource
       return false unless @request_params.try(:[], :entity).try(:[], :id)
 
-      Contribution.find_by(payment_id: @request_params.fetch(:entity).fetch(:id))
+      resource = Contribution.find_by(payment_id: @request_params.fetch(:entity).fetch(:id))
+      unless resource.present?
+        resource = Match.find_by(payment_id: @request_params.fetch(:entity).fetch(:id))
+      end
+      resource
     end
 
     def type

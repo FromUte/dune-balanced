@@ -15,6 +15,50 @@ describe Neighborly::Balanced::Event do
     expect(subject.entity_uri).to eql('/v1/marketplaces/TEST-MP24PC81sknFKEuhffrbAixq/debits/WD3q99CpFnVTDWMgfXpiC2Mo')
   end
 
+  describe '#resource' do
+    context 'when exists a contribution' do
+      before do
+        Contribution.stub(:find_by).and_return(Contribution.new)
+      end
+
+      it 'returns a contribution instance' do
+        expect(subject.resource).to be_instance_of(Contribution)
+      end
+
+      it 'does not call find_by on Match' do
+        expect(Match).not_to receive(:find_by)
+        subject.resource
+      end
+    end
+
+    context 'when does not exists a contribution' do
+      before do
+        Contribution.stub(:find_by).and_return(nil)
+      end
+
+      it 'calls find_by on Match' do
+        expect(Match).to receive(:find_by)
+        subject.resource
+      end
+    end
+
+    context 'when exists a Match and not a Contribution' do
+      before do
+        Contribution.stub(:find_by).and_return(nil)
+        Match.stub(:find_by).and_return(Match.new)
+      end
+
+      it 'returns a match instance' do
+        expect(subject.resource).to be_instance_of(Match)
+      end
+
+      it 'calls find_by on Contribution' do
+        expect(Contribution).to receive(:find_by)
+        subject.resource
+      end
+    end
+  end
+
   shared_examples 'eventable' do
     describe "validability" do
       before { subject.stub(:resource).and_return(resource) }
