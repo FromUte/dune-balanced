@@ -14,9 +14,9 @@ module Neighborly::Balanced
     end
 
     def save
-      if contribution.present?
+      if resource.present?
         PaymentEngine.create_payment_notification(
-          contribution_id: contribution.id,
+          contribution_id: resource.id,
           extra_data:      @request_params[:registration].to_json
         )
       end
@@ -38,7 +38,7 @@ module Neighborly::Balanced
       }.fetch(type).call
     end
 
-    def contribution
+    def resource
       return false unless @request_params.try(:[], :entity).try(:[], :id)
 
       Contribution.find_by(payment_id: @request_params.fetch(:entity).fetch(:id))
@@ -57,7 +57,7 @@ module Neighborly::Balanced
     end
 
     def user
-      contributor.try(:user) || contribution.try(:user)
+      contributor.try(:user) || resource.try(:user)
     end
 
     protected
@@ -67,7 +67,7 @@ module Neighborly::Balanced
     end
 
     def values_matches?
-      contribution.try(:price_in_cents).eql?(payment_amount)
+      resource.try(:price_in_cents).eql?(payment_amount)
     end
 
     def payment_amount

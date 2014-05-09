@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Neighborly::Balanced::Event do
-  let(:contribution)      { double('Contribution', id: 49) }
+  let(:resource)          { double('Contribution', id: 49) }
   let(:user)              { double('User') }
   let(:contributor)       { double('Neighborly::Balanced::Contributor', user: user) }
   let(:notification_type) { 'debit.created' }
@@ -17,12 +17,12 @@ describe Neighborly::Balanced::Event do
   end
 
   describe "validability" do
-    before { subject.stub(:contribution).and_return(contribution) }
+    before { subject.stub(:resource).and_return(resource) }
 
-    context "when contribution exists" do
+    context "when resource exists" do
       context "when its value and payment matches" do
         before do
-          contribution.stub(:price_in_cents).and_return(params[:entity][:amount].to_i)
+          resource.stub(:price_in_cents).and_return(params[:entity][:amount].to_i)
         end
 
         it { should be_valid }
@@ -30,15 +30,15 @@ describe Neighborly::Balanced::Event do
 
       context "when value does not match with payment" do
         before do
-          contribution.stub(:price_in_cents).and_return((params[:entity][:amount]+1).to_i)
+          resource.stub(:price_in_cents).and_return((params[:entity][:amount]+1).to_i)
         end
 
         it { should_not be_valid }
       end
     end
 
-    context "when no contribution does not exist" do
-      let(:contribution) { nil }
+    context "when no resource does not exist" do
+      let(:resource) { nil }
 
       it { should_not be_valid }
     end
@@ -62,9 +62,9 @@ describe Neighborly::Balanced::Event do
 
   shared_examples 'storing payment notification' do
     it 'creates a new payment notification' do
-      subject.stub(:contribution).and_return(contribution)
+      subject.stub(:resource).and_return(resource)
       expect(PaymentEngine).to receive(:create_payment_notification).
-        with(hash_including(contribution_id: contribution.id))
+        with(hash_including(contribution_id: resource.id))
       subject.save
     end
 
