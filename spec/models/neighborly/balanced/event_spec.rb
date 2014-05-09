@@ -149,6 +149,10 @@ describe Neighborly::Balanced::Event do
     it_behaves_like 'eventable'
   end
 
+  context 'when resource is Match' do
+    let(:resource)          { Match.new }
+    let(:resource_key)      { :match_id }
 
+    it_behaves_like 'eventable'
   end
 end

@@ -15,9 +15,10 @@ module Neighborly::Balanced
 
     def save
       if resource.present?
+        key = "#{ActiveModel::Naming.param_key(resource)}_id".to_sym
         PaymentEngine.create_payment_notification(
-          contribution_id: resource.id,
-          extra_data:      @request_params[:registration].to_json
+          key         => resource.id,
+          extra_data: @request_params[:registration].to_json
         )
       end
 
