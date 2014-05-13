@@ -4,7 +4,7 @@ describe Neighborly::Balanced::Refund do
   let(:contribution) do
     stub_model(Contribution, payment_id: '1234567890')
   end
-  let(:debit) { double('Debit') }
+  let(:debit) { double('Debit', refund: nil) }
   subject { described_class.new(contribution) }
 
   before do
@@ -21,9 +21,15 @@ describe Neighborly::Balanced::Refund do
   end
 
   describe 'completion' do
+    before { subject.stub(:debit).and_return(debit) }
+
     it 'performs a refund through Balanced API for the given contribution' do
-      subject.stub(:debit).and_return(debit)
       expect(debit).to receive(:refund)
+      subject.complete!(:match_automatic)
+    end
+
+    it 'sets the contribution as refunded' do
+      expect(contribution).to receive(:refund!)
       subject.complete!(:match_automatic)
     end
   end

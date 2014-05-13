@@ -13,6 +13,7 @@ module Neighborly::Balanced
           'reason' => I18n.t("en.neighborly.balanced.refund_reason.#{reason}")
         }
       )
+      contribution.refund!
     end
 
     def debit
