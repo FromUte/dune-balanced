@@ -1,0 +1,7 @@
+en:
+  neighborly:
+    balanced:
+      refund:
+        description: 'Refund for contribution #%{contribution}'
+      refund_reasons:
+        match_automatic: 'Automatic refund done after match finishing without use entire paid value'
