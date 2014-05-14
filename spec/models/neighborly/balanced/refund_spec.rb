@@ -1,11 +1,18 @@
 require 'spec_helper'
 
 describe Neighborly::Balanced::Refund do
-  let(:contribution) do
-    stub_model(Contribution, payment_id: '1234567890')
+  let(:payable_resource) do
+    double(
+      id:                               '1',
+      payment_id:                       '1234567890',
+      value:                            100,
+      payment_service_fee:              2,
+      payment_service_fee_paid_by_user: true,
+      refund!:                          nil
+    )
   end
   let(:debit) { double('Debit', refund: nil) }
-  subject { described_class.new(contribution) }
+  subject { described_class.new(payable_resource) }
 
   before do
     Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('qwe')

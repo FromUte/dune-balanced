@@ -2,22 +2,24 @@ module Neighborly::Balanced
   class Refund
     attr_reader :contribution
 
-    def initialize(contribution)
-      @contribution = contribution
+    attr_reader :paid_resource
+
+    def initialize(paid_resource)
+      @paid_resource = paid_resource
     end
 
     def complete!(reason)
       debit.refund(
-        description: I18n.t('en.neighborly.balanced.refund.description', contribution: contribution.id),
+        description: I18n.t('neighborly.balanced.refund.description', resource: paid_resource.id),
         meta: {
-          'reason' => I18n.t("en.neighborly.balanced.refund_reason.#{reason}")
+          'reason' => I18n.t("neighborly.balanced.refund_reasons.#{reason}")
         }
       )
-      contribution.refund!
+      paid_resource.refund!
     end
 
     def debit
-      @debit ||= ::Balanced::Debit.find("/v1/marketplaces/#{Configuration[:balanced_marketplace_id]}/debits/#{contribution.payment_id}")
+      @debit ||= ::Balanced::Debit.find("/v1/marketplaces/#{Configuration[:balanced_marketplace_id]}/debits/#{paid_resource.payment_id}")
     end
   end
 end
