@@ -11,7 +11,10 @@ module Neighborly::Balanced
     def complete!(reason)
       debit.refund(
         amount:      resource_amount,
-        description: I18n.t('neighborly.balanced.refund.description', resource: paid_resource.id),
+        description: I18n.t('neighborly.balanced.refund.description',
+          resource_id:   paid_resource.id,
+          resource_name: paid_resource.class.model_name.human
+        ),
         meta: {
           'reason' => I18n.t("neighborly.balanced.refund_reasons.#{reason}")
         }

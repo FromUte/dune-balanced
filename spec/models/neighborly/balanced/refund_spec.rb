@@ -3,12 +3,13 @@ require 'spec_helper'
 describe Neighborly::Balanced::Refund do
   let(:payable_resource) do
     double(
-      id:                               '1',
-      payment_id:                       '1234567890',
-      value:                            100,
-      payment_service_fee:              2,
+      class:               double(model_name: double(human: 'Resource')),
+      id:                  '1',
+      payment_id:          '1234567890',
+      payment_service_fee: 2,
       payment_service_fee_paid_by_user: true,
-      refund!:                          nil
+      refund!:             nil,
+      value:               100
     )
   end
   let(:debit) { double('Debit', refund: nil) }

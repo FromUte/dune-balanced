@@ -2,6 +2,6 @@ en:
   neighborly:
     balanced:
       refund:
-        description: 'Refund for #{resource.model_name.human} #%{resource}'
+        description: 'Refund for %{resource_name} #%{resource_id}'
       refund_reasons:
         match_automatic: 'Automatic refund done after match finishing without use entire paid value'
