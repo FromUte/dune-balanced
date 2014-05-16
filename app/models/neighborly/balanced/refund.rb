@@ -8,17 +8,20 @@ module Neighborly::Balanced
       @paid_resource = paid_resource
     end
 
-    def complete!(reason)
-      debit.refund(
-        amount:      resource_amount,
-        description: I18n.t('neighborly.balanced.refund.description',
-          resource_id:   paid_resource.id,
-          resource_name: paid_resource.class.model_name.human
-        ),
-        meta: {
-          'reason' => I18n.t("neighborly.balanced.refund_reasons.#{reason}")
-        }
-      )
+    def complete!(reason, amount = nil)
+      refund_amount = amount || resource_amount
+      unless refund_amount.zero?
+        debit.refund(
+          amount:      refund_amount,
+          description: I18n.t('neighborly.balanced.refund.description',
+            resource_id:   paid_resource.id,
+            resource_name: paid_resource.class.model_name.human
+          ),
+          meta: {
+            'reason' => I18n.t("neighborly.balanced.refund_reasons.#{reason}")
+          }
+        )
+      end
       paid_resource.refund!
     end
 

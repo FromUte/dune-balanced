@@ -32,62 +32,85 @@ describe Neighborly::Balanced::Refund do
     before { subject.stub(:debit).and_return(debit) }
     let(:operational_fee) { described_class::FIXED_OPERATIONAL_FEE }
 
-    it 'performs a refund through Balanced API for the given payable_resource' do
-      expect(debit).to receive(:refund)
-      subject.complete!(:match_automatic)
-    end
-
-    context 'when contributor paid payment service fees' do
-      before do
-        payable_resource.stub(:payment_service_fee_paid_by_user).and_return(true)
-      end
-
-      it 'refunds them using cents unit, except by fixed operational fee' do
-        expect(debit).to receive(:refund).with(hash_including(amount: 10200 - operational_fee))
-        subject.complete!(:match_automatic)
-      end
-
-      it 'refunds an integer amount' do
-        debit.stub(:refund) do |args|
-          expect(args[:amount]).to be_an(Integer)
+    context 'without passing amount parameter' do
+      context 'when contributor paid payment service fees' do
+        before do
+          payable_resource.stub(:payment_service_fee_paid_by_user).and_return(true)
         end
-        subject.complete!(:match_automatic)
-      end
-    end
 
-    context 'when contributor didn\'t paid payment service fees' do
-      before do
-        payable_resource.stub(:payment_service_fee_paid_by_user).and_return(false)
-      end
-
-      it 'refund contributed value using cents unit, except by fixed operational fee' do
-        expect(debit).to receive(:refund).with(hash_including(amount: 10000 - operational_fee))
-        subject.complete!(:match_automatic)
-      end
-
-      it 'refunds an integer amount' do
-        debit.stub(:refund) do |args|
-          expect(args[:amount]).to be_an(Integer)
+        it 'refunds them using cents unit, except by fixed operational fee' do
+          expect(debit).to receive(:refund).with(hash_including(amount: 10200 - operational_fee))
+          subject.complete!(:match_automatic)
         end
-        subject.complete!(:match_automatic)
+
+        it 'refunds an integer amount' do
+          debit.stub(:refund) do |args|
+            expect(args[:amount]).to be_an(Integer)
+          end
+          subject.complete!(:match_automatic)
+        end
+      end
+
+      context 'when contributor didn\'t paid payment service fees' do
+        before do
+          payable_resource.stub(:payment_service_fee_paid_by_user).and_return(false)
+        end
+
+        it 'refund contributed value using cents unit, except by fixed operational fee' do
+          expect(debit).to receive(:refund).with(hash_including(amount: 10000 - operational_fee))
+          subject.complete!(:match_automatic)
+        end
+
+        it 'refunds an integer amount' do
+          debit.stub(:refund) do |args|
+            expect(args[:amount]).to be_an(Integer)
+          end
+          subject.complete!(:match_automatic)
+        end
       end
     end
 
-    context 'with successful refund through Balanced' do
+    context 'passing amount parameter' do
+      it 'refunds in the exact value given' do
+        expect(debit).to receive(:refund).with(hash_including(amount: 42))
+        subject.complete!(:match_automatic, 42)
+      end
+    end
+
+    context 'with non zero amount' do
+      it 'performs a refund through Balanced API for the given payable_resource' do
+        expect(debit).to receive(:refund)
+        subject.complete!(:match_automatic, 12)
+      end
+
+      context 'with successful refund through Balanced' do
+        it 'sets the payable_resource as refunded' do
+          expect(payable_resource).to receive(:refund!)
+          subject.complete!(:match_automatic)
+        end
+      end
+
+      context 'with unsuccessful refund through Balanced' do
+        before do
+          debit.stub(:refund).and_raise { Balanced::Error }
+        end
+
+        it 'doesn\'t update state of the payable_resource to refunded' do
+          expect(payable_resource).to_not receive(:refund!)
+          subject.complete!(:match_automatic) rescue nil
+        end
+      end
+    end
+
+    context 'with zero amount' do
       it 'sets the payable_resource as refunded' do
         expect(payable_resource).to receive(:refund!)
-        subject.complete!(:match_automatic)
-      end
-    end
-
-    context 'with unsuccessful refund through Balanced' do
-      before do
-        debit.stub(:refund).and_raise { Balanced::Error }
+        subject.complete!(:match_automatic, 0)
       end
 
-      it 'doesn\'t update state of the payable_resource to refunded' do
-        expect(payable_resource).to_not receive(:refund!)
-        subject.complete!(:match_automatic) rescue nil
+      it 'doesn\'t perform request to Balanced API' do
+        expect(debit).to_not receive(:refund)
+        subject.complete!(:match_automatic, 0)
       end
     end
   end
