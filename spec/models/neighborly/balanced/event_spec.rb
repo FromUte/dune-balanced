@@ -33,7 +33,7 @@ describe Neighborly::Balanced::Event do
 
     context 'when does not exists a contribution' do
       before do
-        Contribution.stub(:find_by).and_return(nil)
+        Contribution.stub(:find_by)
       end
 
       it 'calls find_by on Match' do
@@ -44,7 +44,7 @@ describe Neighborly::Balanced::Event do
 
     context 'when exists a Match and not a Contribution' do
       before do
-        Contribution.stub(:find_by).and_return(nil)
+        Contribution.stub(:find_by)
         Match.stub(:find_by).and_return(Match.new)
       end
 
