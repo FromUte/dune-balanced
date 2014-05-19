@@ -1,6 +1,6 @@
 module Neighborly::Balanced
   class Refund
-    FIXED_OPERATIONAL_FEE = 30 # in cents
+    FIXED_OPERATIONAL_FEE = 0.3
 
     attr_reader :paid_resource
 
@@ -8,9 +8,9 @@ module Neighborly::Balanced
       @paid_resource = paid_resource
     end
 
-    def complete!(reason, amount = nil)
-      refund_amount = amount || resource_amount
-      unless refund_amount.zero?
+    def complete!(reason, amount = paid_resource.value)
+      unless amount.zero?
+        refund_amount = ((amount + refundable_fees(amount)) * 100).round
         debit.refund(
           amount:      refund_amount,
           description: I18n.t('neighborly.balanced.refund.description',
@@ -27,6 +27,16 @@ module Neighborly::Balanced
 
     def debit
       @debit ||= ::Balanced::Debit.find("/v1/marketplaces/#{Configuration[:balanced_marketplace_id]}/debits/#{paid_resource.payment_id}")
+    end
+
+    def refundable_fees(refund_amount)
+      percentual_fee = if paid_resource.payment_service_fee_paid_by_user
+        refund_amount / paid_resource.value * paid_resource.payment_service_fee
+      else
+        0
+      end
+
+      (percentual_fee - FIXED_OPERATIONAL_FEE).round(2)
     end
 
     private
