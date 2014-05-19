@@ -4,7 +4,7 @@ module Neighborly::Balanced
 
       def perform(event)
         if event.type.eql? 'debit.canceled'
-          event.contribution.cancel!
+          event.resource.cancel!
         end
       end
 

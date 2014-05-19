@@ -1,5 +1,4 @@
-# Dummy class to be stubbed
-class Contribution
+class Match
   extend ActiveModel::Naming
 
   def self.find(*)
@@ -24,5 +23,9 @@ class Contribution
 
   def project
     @project ||= Project.new
+  end
+
+  def user
+    @user ||= User.new
   end
 end

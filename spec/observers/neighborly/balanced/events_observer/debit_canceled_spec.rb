@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Neighborly::Balanced::EventsObserver::DebitCanceled do
   let(:contribution) { double('Contribution') }
   let(:event) do
-    double('Neighborly::Balanced::Event', contribution: contribution)
+    double('Neighborly::Balanced::Event', resource: contribution)
   end
 
   describe '#perform' do
