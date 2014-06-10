@@ -5,7 +5,7 @@ module Neighborly
 
       config.autoload_paths += Dir["#{config.root}/app/observers/**/"]
 
-      initializer 'include_user_concern' do |app|
+      config.to_prepare do
         ::User.send(:include, Neighborly::Balanced::User)
       end
     end
