@@ -6,5 +6,6 @@ module Neighborly::Balanced
     # to get this User constant inside
     # Neighborly::Balanced module.
     belongs_to :user, class_name: '::User'
+    has_many :projects, through: :user
   end
 end
