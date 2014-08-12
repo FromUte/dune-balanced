@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday',            '0.8.9'
   spec.add_dependency 'faraday_middleware', '0.9.0'
 
-  spec.add_dependency 'balanced',           '~> 0.8.0'
+  spec.add_dependency 'balanced',           '~> 1.1'
   spec.add_dependency 'draper',             '~> 1.3'
   spec.add_dependency 'rails',              '~> 4.0'
   spec.add_development_dependency 'rspec-rails', '~> 2.14'
