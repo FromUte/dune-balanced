@@ -151,7 +151,6 @@ describe Neighborly::Balanced::Event do
       it_behaves_like 'storing payment notification'
 
       it 'gets its contributor from request params' do
-        Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('QWERTY')
         Neighborly::Balanced::Contributor.stub(:find_by).
           with(bank_account_href: '/bank_accounts/BA7AA3yiW6upqETZwU8pyqYg').
           and_return(contributor)
@@ -176,7 +175,6 @@ describe Neighborly::Balanced::Event do
       it_behaves_like 'storing payment notification'
 
       it 'gets its contributor from request params' do
-        Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('QWERTY')
         Neighborly::Balanced::Contributor.stub(:find_by).
           with(bank_account_href: '/bank_accounts/BA7AA3yiW6upqETZwU8pyqYg').
           and_return(contributor)

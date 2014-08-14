@@ -15,10 +15,6 @@ describe Neighborly::Balanced::Refund do
   let(:debit) { double('Debit', refund: nil) }
   subject { described_class.new(payable_resource) }
 
-  before do
-    Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('qwe')
-  end
-
   describe 'debit' do
     it 'gets the debit object through Balanced API' do
       Balanced::Debit.stub(:find).
