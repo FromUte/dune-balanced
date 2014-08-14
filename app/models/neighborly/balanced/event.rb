@@ -53,12 +53,12 @@ module Neighborly::Balanced
       @request_params.fetch(:type)
     end
 
-    def entity_uri
-      @request_params.fetch(:entity).fetch(:uri)
+    def entity_href
+      @request_params.fetch(:entity).fetch(:href)
     end
 
     def contributor
-      Neighborly::Balanced::Contributor.find_by(bank_account_uri: bank_account_uri)
+      Neighborly::Balanced::Contributor.find_by(bank_account_href: bank_account_href)
     end
 
     def user
@@ -83,11 +83,11 @@ module Neighborly::Balanced
       !!type['bank_account_verification']
     end
 
-    def bank_account_uri
+    def bank_account_href
       if verification?
-        uri = entity_uri.match(/\A(?<bank_account_uri>\/.+\/bank_accounts\/.+)\/verifications/)[:bank_account_uri]
-        uri['/bank_accounts'] = "/marketplaces/#{Configuration[:balanced_marketplace_id]}/bank_accounts"
-        uri
+        href = entity_href.match(/\A(?<bank_account_href>\/.+\/bank_accounts\/.+)\/verifications/)[:bank_account_href]
+        href['/bank_accounts'] = "/marketplaces/#{Configuration[:balanced_marketplace_id]}/bank_accounts"
+        href
       end
     end
   end

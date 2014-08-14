@@ -11,8 +11,8 @@ describe Neighborly::Balanced::Event do
     expect(subject.type).to eql('debit.created')
   end
 
-  it 'gets the entity uri from request params' do
-    expect(subject.entity_uri).to eql('/v1/marketplaces/TEST-MP24PC81sknFKEuhffrbAixq/debits/WD3q99CpFnVTDWMgfXpiC2Mo')
+  it 'gets the entity href from request params' do
+    expect(subject.entity_href).to eql('/v1/marketplaces/TEST-MP24PC81sknFKEuhffrbAixq/debits/WD3q99CpFnVTDWMgfXpiC2Mo')
   end
 
   describe '#resource' do
@@ -149,7 +149,7 @@ describe Neighborly::Balanced::Event do
       it 'gets its contributor from request params' do
         Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('QWERTY')
         Neighborly::Balanced::Contributor.stub(:find_by).
-          with(bank_account_uri: '/v1/marketplaces/QWERTY/bank_accounts/BAPGUSU1HHB5kWPcBmnxEq6').
+          with(bank_account_href: '/v1/marketplaces/QWERTY/bank_accounts/BAPGUSU1HHB5kWPcBmnxEq6').
           and_return(contributor)
         expect(subject.contributor).to eql(contributor)
       end
@@ -174,7 +174,7 @@ describe Neighborly::Balanced::Event do
       it 'gets its contributor from request params' do
         Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('QWERTY')
         Neighborly::Balanced::Contributor.stub(:find_by).
-          with(bank_account_uri: '/v1/marketplaces/QWERTY/bank_accounts/BA4xYXDZ7vv62KvVAlgtRIXd').
+          with(bank_account_href: '/v1/marketplaces/QWERTY/bank_accounts/BA4xYXDZ7vv62KvVAlgtRIXd').
           and_return(contributor)
         expect(subject.contributor).to eql(contributor)
       end

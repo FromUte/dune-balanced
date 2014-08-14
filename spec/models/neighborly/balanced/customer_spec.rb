@@ -12,7 +12,7 @@ describe Neighborly::Balanced::Customer do
   } ) }
 
   let(:balanced_customer) do
-    double('::Balanced::Customer', uri: '/qwertyuiop').as_null_object
+    double('::Balanced::Customer', href: '/qwertyuiop').as_null_object
   end
 
   before do
@@ -26,7 +26,7 @@ describe Neighborly::Balanced::Customer do
     context 'when user already has a balanced_contributor associated' do
       before do
         contributor = double('Neighborly::Balanced::Contributor',
-                             uri: '/qwertyuiop')
+                             href: '/qwertyuiop')
         user.stub(:balanced_contributor).
                   and_return(contributor)
       end
