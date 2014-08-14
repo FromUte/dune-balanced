@@ -22,7 +22,7 @@ describe Neighborly::Balanced::Refund do
   describe 'debit' do
     it 'gets the debit object through Balanced API' do
       Balanced::Debit.stub(:find).
-        with('/v1/marketplaces/qwe/debits/1234567890').
+        with('/debits/1234567890').
         and_return(debit)
       expect(subject.debit).to eql(debit)
     end

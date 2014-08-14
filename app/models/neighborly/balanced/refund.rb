@@ -26,7 +26,7 @@ module Neighborly::Balanced
     end
 
     def debit
-      @debit ||= ::Balanced::Debit.find("/v1/marketplaces/#{Configuration[:balanced_marketplace_id]}/debits/#{paid_resource.payment_id}")
+      @debit ||= ::Balanced::Debit.find("/debits/#{paid_resource.payment_id}")
     end
 
     def refundable_fees(refund_amount)
