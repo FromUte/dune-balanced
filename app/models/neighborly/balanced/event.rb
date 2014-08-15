@@ -18,7 +18,7 @@ module Neighborly::Balanced
         key = "#{ActiveModel::Naming.param_key(resource)}_id".to_sym
         PaymentEngine.create_payment_notification(
           key         => resource.id,
-          extra_data: @request_params[:registration].to_json
+          extra_data: @request_params.to_json
         )
       end
 
@@ -40,25 +40,26 @@ module Neighborly::Balanced
     end
 
     def resource
-      return false unless @request_params.try(:[], :entity).try(:[], :id)
+      payment_id = entity_params.fetch(:id)
+      return false unless payment_id
 
-      resource = Contribution.find_by(payment_id: @request_params.fetch(:entity).fetch(:id))
+      resource = Contribution.find_by(payment_id: payment_id)
       unless resource.present?
-        resource = Match.find_by(payment_id: @request_params.fetch(:entity).fetch(:id))
+        resource = Match.find_by(payment_id: payment_id)
       end
       resource
     end
 
     def type
-      @request_params.fetch(:type)
+      @request_params.fetch(:events).last.fetch(:type)
     end
 
-    def entity_uri
-      @request_params.fetch(:entity).fetch(:uri)
+    def entity_href
+      @request_params.fetch(:events).last.fetch(:href)
     end
 
     def contributor
-      Neighborly::Balanced::Contributor.find_by(bank_account_uri: bank_account_uri)
+      Neighborly::Balanced::Contributor.find_by(bank_account_href: bank_account_href)
     end
 
     def user
@@ -76,19 +77,22 @@ module Neighborly::Balanced
     end
 
     def payment_amount
-      @request_params.fetch(:entity).fetch(:amount).to_i
+      entity_params.fetch(:amount).to_i
     end
 
     def verification?
       !!type['bank_account_verification']
     end
 
-    def bank_account_uri
+    def bank_account_href
       if verification?
-        uri = entity_uri.match(/\A(?<bank_account_uri>\/.+\/bank_accounts\/.+)\/verifications/)[:bank_account_uri]
-        uri['/bank_accounts'] = "/marketplaces/#{Configuration[:balanced_marketplace_id]}/bank_accounts"
-        uri
+        "/bank_accounts/#{entity_params.fetch(:links).fetch(:bank_account)}"
       end
+    end
+
+    def entity_params
+      entity_type = type.split('.').first.pluralize
+      @request_params.fetch(:events).last.fetch(:entity).fetch(entity_type).last
     end
   end
 end

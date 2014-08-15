@@ -11,8 +11,8 @@ describe Neighborly::Balanced::Event do
     expect(subject.type).to eql('debit.created')
   end
 
-  it 'gets the entity uri from request params' do
-    expect(subject.entity_uri).to eql('/v1/marketplaces/TEST-MP24PC81sknFKEuhffrbAixq/debits/WD3q99CpFnVTDWMgfXpiC2Mo')
+  it 'gets the entity href from request params' do
+    expect(subject.entity_href).to eql('/events/EVef85706a23e211e4b78b061e5f402045')
   end
 
   describe '#resource' do
@@ -64,17 +64,21 @@ describe Neighborly::Balanced::Event do
       before { subject.stub(:resource).and_return(resource) }
 
       context 'when resource exists' do
+        before do
+          resource.stub(:price_in_cents).and_return(amount)
+        end
+
         context 'when its value and payment matches' do
-          before do
-            resource.stub(:price_in_cents).and_return(params[:entity][:amount].to_i)
+          let(:amount) do
+            params[:events].last[:entity][:debits].last[:amount].to_i
           end
 
           it { should be_valid }
         end
 
         context 'when value does not match with payment' do
-          before do
-            resource.stub(:price_in_cents).and_return((params[:entity][:amount]+1).to_i)
+          let(:amount) do
+            params[:events].last[:entity][:debits].last[:amount].to_i + 1
           end
 
           it { should_not be_valid }
@@ -147,9 +151,8 @@ describe Neighborly::Balanced::Event do
       it_behaves_like 'storing payment notification'
 
       it 'gets its contributor from request params' do
-        Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('QWERTY')
         Neighborly::Balanced::Contributor.stub(:find_by).
-          with(bank_account_uri: '/v1/marketplaces/QWERTY/bank_accounts/BAPGUSU1HHB5kWPcBmnxEq6').
+          with(bank_account_href: '/bank_accounts/BA7AA3yiW6upqETZwU8pyqYg').
           and_return(contributor)
         expect(subject.contributor).to eql(contributor)
       end
@@ -172,9 +175,8 @@ describe Neighborly::Balanced::Event do
       it_behaves_like 'storing payment notification'
 
       it 'gets its contributor from request params' do
-        Configuration.stub(:[]).with(:balanced_marketplace_id).and_return('QWERTY')
         Neighborly::Balanced::Contributor.stub(:find_by).
-          with(bank_account_uri: '/v1/marketplaces/QWERTY/bank_accounts/BA4xYXDZ7vv62KvVAlgtRIXd').
+          with(bank_account_href: '/bank_accounts/BA7AA3yiW6upqETZwU8pyqYg').
           and_return(contributor)
         expect(subject.contributor).to eql(contributor)
       end

@@ -6,12 +6,12 @@ module Neighborly::Balanced
     end
 
     def fetch
-      current_customer_uri = @user.balanced_contributor.try(:uri)
-      @customer          ||= if current_customer_uri
-                               ::Balanced::Customer.find(current_customer_uri)
-                             else
-                               create!
-                             end
+      current_customer_href = @user.balanced_contributor.try(:href)
+      @customer ||= if current_customer_href
+        ::Balanced::Customer.find(current_customer_href)
+      else
+        create!
+      end
     end
 
     def update!
@@ -38,7 +38,7 @@ module Neighborly::Balanced
                                             postal_code:  @user.address_zip_code
                                           })
       customer.save
-      @user.create_balanced_contributor(uri: customer.uri)
+      @user.create_balanced_contributor(href: customer.href)
 
       customer
     end
