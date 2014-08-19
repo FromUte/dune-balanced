@@ -38,14 +38,14 @@ module Neighborly::Balanced
 
       project_url = Rails.application.routes.url_helpers.project_url(project)
       subject.meta = {
-        project:       project.name,
-        goal:          project.goal,
-        campaign_type: project.campaign_type.humanize,
-        user:          project.user.name,
-        category:      project.category.name_en,
-        url:           project_url,
-        expires_at:    I18n.l(project.expires_at.utc),
-        id:            project.id,
+        'Project'       => project.name,
+        'Goal'          => project.goal,
+        'Campaign Type' => project.campaign_type.humanize,
+        'User'          => project.user.name,
+        'Category'      => project.category.name_en,
+        'URL'           => project_url,
+        'Expires At'    => I18n.l(project.expires_at),
+        'ID'            => project.id,
       }
       subject.save
 
