@@ -4,7 +4,8 @@ module Neighborly::Balanced
   class Event
     extend Observable
 
-    TYPES = %w(debit.created
+    TYPES = %w(debit.canceled
+               debit.created
                debit.succeeded
                bank_account_verification.verified
                bank_account_verification.deposited)
@@ -14,13 +15,13 @@ module Neighborly::Balanced
     end
 
     def save
-      if resource.present?
-        key = "#{ActiveModel::Naming.param_key(resource)}_id".to_sym
-        PaymentEngine.create_payment_notification(
-          key         => resource.id,
-          extra_data: @request_params.to_json
-        )
-      end
+      return unless valid? && resource.present?
+
+      key = "#{ActiveModel::Naming.param_key(resource)}_id".to_sym
+      PaymentEngine.create_payment_notification(
+        key         => resource.id,
+        extra_data: @request_params.to_json
+      )
 
       self.class.changed
       self.class.notify_observers(self)
