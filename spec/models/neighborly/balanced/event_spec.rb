@@ -15,6 +15,28 @@ describe Neighborly::Balanced::Event do
     expect(subject.entity_href).to eql('/events/EVef85706a23e211e4b78b061e5f402045')
   end
 
+  describe 'validability' do
+    context 'with predefined types' do
+      before do
+        params[:events].last[:type] = 'bank_account_verification.deposited'
+      end
+
+      it 'is valid' do
+        expect(subject).to be_valid
+      end
+    end
+
+    context 'with types other than the those predefined' do
+      before do
+        params[:events].last[:type] = 'fee_settlement.created'
+      end
+
+      it 'is invalid' do
+        expect(subject).to_not be_valid
+      end
+    end
+  end
+
   describe '#resource' do
     context 'when exists a contribution' do
       before do
@@ -60,25 +82,19 @@ describe Neighborly::Balanced::Event do
   end
 
   shared_examples 'eventable' do
+    before do
+      subject.stub_chain(:resource).and_return(resource)
+    end
+
     describe 'validability' do
-      before { subject.stub(:resource).and_return(resource) }
-
       context 'when resource exists' do
-        before do
-          resource.stub(:price_in_cents).and_return(amount)
-        end
-
         context 'when its value and payment matches' do
-          let(:amount) do
-            params[:events].last[:entity][:debits].last[:amount].to_i
-          end
-
           it { should be_valid }
         end
 
         context 'when value does not match with payment' do
-          let(:amount) do
-            params[:events].last[:entity][:debits].last[:amount].to_i + 1
+          before do
+            subject.stub_chain(:resource, :price_in_cents).and_return(123_456)
           end
 
           it { should_not be_valid }
@@ -110,7 +126,6 @@ describe Neighborly::Balanced::Event do
 
     shared_examples 'storing payment notification' do
       it 'creates a new payment notification' do
-        subject.stub(:resource).and_return(resource)
         expect(PaymentEngine).to receive(:create_payment_notification).
           with(hash_including(resource_key => resource.id))
         subject.save
@@ -189,15 +204,15 @@ describe Neighborly::Balanced::Event do
   end
 
   context 'when resource is Contribution' do
-    let(:resource)          { Contribution.new }
-    let(:resource_key)      { :contribution_id }
+    let(:resource)     { Contribution.new }
+    let(:resource_key) { :contribution_id }
 
     it_behaves_like 'eventable'
   end
 
   context 'when resource is Match' do
-    let(:resource)          { Match.new }
-    let(:resource_key)      { :match_id }
+    let(:resource)     { Match.new }
+    let(:resource_key) { :match_id }
 
     it_behaves_like 'eventable'
   end
