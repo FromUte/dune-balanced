@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.0.0
+
+* Define interface to do refund of contributions
+* Relate Contributor with Project
+* Upgrade to Balanced API v1.1
+* Let people group transactions by using Orders
+* Upgrade ruby to 2.1.2
+* A lot of bug fixes
+
 ## 1.1.0
 
 * Create Payout to pay raised amount of a project to a project owner Bank Account.
