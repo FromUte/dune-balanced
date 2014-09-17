@@ -15,13 +15,15 @@ module Neighborly::Balanced
     end
 
     def save
-      return unless valid? && resource.present?
+      return unless valid?
 
-      key = "#{ActiveModel::Naming.param_key(resource)}_id".to_sym
-      PaymentEngine.create_payment_notification(
-        key         => resource.id,
-        extra_data: @request_params.to_json
-      )
+      if resource.present?
+        key = "#{ActiveModel::Naming.param_key(resource)}_id".to_sym
+        PaymentEngine.create_payment_notification(
+          key         => resource.id,
+          extra_data: @request_params.to_json
+        )
+      end
 
       self.class.changed
       self.class.notify_observers(self)

@@ -83,7 +83,7 @@ describe Neighborly::Balanced::Event do
 
   shared_examples 'eventable' do
     before do
-      subject.stub_chain(:resource).and_return(resource)
+      allow(subject).to receive(:resource).and_return(resource)
     end
 
     describe 'validability' do
