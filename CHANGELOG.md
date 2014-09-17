@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.1
+
+* Fix bug preventing `Event`s to be notified on `#save`.
+
 ## 2.0.0
 
 * Define interface to do refund of contributions
