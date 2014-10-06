@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.0.2
+
+* `Event#entity_href` now returns the href of the entity inside the
+  event, not the event itself.
+
 ## 2.0.1
 
 * Fix bug preventing `Event`s to be notified on `#save`.
