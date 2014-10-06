@@ -12,7 +12,7 @@ describe Neighborly::Balanced::Event do
   end
 
   it 'gets the entity href from request params' do
-    expect(subject.entity_href).to eql('/events/EVef85706a23e211e4b78b061e5f402045')
+    expect(subject.entity_href).to eql('/debits/WD7hGWwIl9kQLAScc2bQJsod')
   end
 
   describe 'validability' do

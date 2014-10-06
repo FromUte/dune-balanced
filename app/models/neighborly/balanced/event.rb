@@ -58,7 +58,7 @@ module Neighborly::Balanced
     end
 
     def entity_href
-      @request_params.fetch(:events).last.fetch(:href)
+      entity_params.fetch(:href)
     end
 
     def contributor
