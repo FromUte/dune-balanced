@@ -4,7 +4,7 @@
 
 ## What
 
-This is an integration between [Balanced](https://www.balancedpayments.com/) and [Neighborly](https://github.com/luminopolis/neighborly), a crowdfunding platform.
+This is an integration between [Balanced](https://www.balancedpayments.com/) and [Neighborl.y Donate](https://github.com/neighborly/neighborly-donate), a crowdfunding platform.
 
 ## How
 
@@ -21,7 +21,7 @@ And install the migrations:
 $ bundle exec rake railties:install:migrations db:migrate
 ```
 
-Neighborly::Balanced is a Rails Engine, integrating with your (Neighborly) Rails application with very little of effort. To turn the engine on, mount it in an appropriate route:
+Neighborly::Balanced is a Rails Engine, integrating with your (Neighbor.ly Donate) Rails application with very little of effort. To turn the engine on, mount it in an appropriate route:
 
 ```ruby
 # config/routes.rb
