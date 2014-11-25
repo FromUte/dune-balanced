@@ -9,26 +9,8 @@ module Neighborly::Balanced
     end
 
     def complete!(bank_account_href = nil)
-      to_be_credited = if bank_account_href
-        Balanced::BankAccount.find(bank_account_href)
-      else
-        customer.bank_accounts.first
-      end
-      if to_be_credited.blank?
-        raise NoBankAccount, 'The customer doesn\'t have a bank account to credit.'
-      end
-
-      order.credit_to(
-        amount:      amount_in_cents,
-        destination: to_be_credited,
-      )
-      log_payout
-    end
-
-    def amount
-      ProjectFinancialByService
-        .new(@project, %w(balanced-bankaccount balanced-creditcard))
-        .net_amount
+      credit_project_owner!(bank_account_href)
+      credit_platform!
     end
 
     def customer
@@ -37,8 +19,20 @@ module Neighborly::Balanced
 
     private
 
-    def amount_in_cents
-      (amount * 100).round
+    def credit_project_owner!(bank_account_href = nil)
+      to_be_credited = if bank_account_href
+        Balanced::BankAccount.find(bank_account_href)
+      else
+        customer.bank_accounts.first
+      end
+
+      credit!(to_be_credited, financials.net_amount)
+    end
+
+    def credit_platform!
+      to_be_credited =
+        Balanced::Marketplace.mine.owner_customer.bank_accounts.first
+      credit!(to_be_credited, order.platform_fee)
     end
 
     def order
@@ -49,7 +43,24 @@ module Neighborly::Balanced
       end
     end
 
-    def log_payout
+    def financials
+      @financials ||= ProjectFinancialByService
+        .new(p, %w(balanced-bankaccount balanced-creditcard))
+    end
+
+    def neighborly_customer
+      @neighborly_customer ||= Neighborly::Balanced::Customer.new(@project.user, {})
+    end
+
+    def credit!(bank_account, amount)
+      if bank_account.blank?
+        raise NoBankAccount, 'The customer doesn\'t have a bank account to credit.'
+      end
+
+      order.credit_to(
+        amount:      in_cents(amount),
+        destination: bank_account,
+      )
       ::Payout.create(
         payment_service: 'balanced',
         project_id:      @project.id,
@@ -58,8 +69,8 @@ module Neighborly::Balanced
       )
     end
 
-    def neighborly_customer
-      @neighborly_customer ||= Neighborly::Balanced::Customer.new(@project.user, {})
+    def in_cents(amount)
+      (amount * 100).round
     end
   end
 end

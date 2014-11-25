@@ -3,16 +3,23 @@ require 'spec_helper'
 describe Neighborly::Balanced::Payout do
   subject { described_class.new(project, requestor) }
   before do
-    subject.stub(:amount).and_return(amount)
+    allow(subject).to receive(:financials).and_return(financials)
     subject.stub(:neighborly_customer).and_return(neighborly_customer)
     allow(subject).to receive(:order).and_return(order)
+    allow(subject).to receive(:credit_platform!)
   end
   let(:project) { double('Project').as_null_object }
   let(:requestor) { double('User').as_null_object }
   let(:neighborly_customer) do
     double('Neighborly::Balanced::Customer').as_null_object
   end
-  let(:amount) { BigDecimal.new(100) }
+  let(:financials) do
+    double(
+      net_amount:          BigDecimal.new(90),
+      payment_service_fee: BigDecimal.new(5),
+      platform_fee:        BigDecimal.new(10),
+    )
+  end
   let(:order) { double('Order', credit_to: nil) }
 
   describe "completion" do
@@ -30,7 +37,7 @@ describe Neighborly::Balanced::Payout do
       let(:bank_accounts) { [] }
 
       it 'credits the amount (in cents) to costumer\'s account' do
-        expect(order).to receive(:credit_to).with(hash_including(amount: 10000))
+        expect(order).to receive(:credit_to).with(hash_including(amount: 9000))
         subject.complete!('/bank_accounts/foobar')
       end
     end
@@ -39,7 +46,7 @@ describe Neighborly::Balanced::Payout do
       let(:bank_accounts) { [double('::Balanced::BankAccount')] }
 
       it "credits the amount (in cents) to costumer's account" do
-        expect(order).to receive(:credit_to).with(hash_including(amount: 10000))
+        expect(order).to receive(:credit_to).with(hash_including(amount: 9000))
         subject.complete!
       end
 
@@ -50,7 +57,7 @@ describe Neighborly::Balanced::Payout do
               payment_service: 'balanced',
               project_id:      project,
               user_id:         requestor,
-              value:           amount))
+              value:           financials.net_amount))
             subject.complete!
         end
       end
