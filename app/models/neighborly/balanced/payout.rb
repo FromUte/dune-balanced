@@ -35,11 +35,7 @@ module Neighborly::Balanced
       neighborly_customer.fetch
     end
 
-    def neighborly_customer
-      @neighborly_customer ||= Neighborly::Balanced::Customer.new(@project.user, {})
-    end
-
-    protected
+    private
 
     def amount_in_cents
       (amount * 100).round
@@ -60,6 +56,10 @@ module Neighborly::Balanced
         user_id:         @requestor.id,
         value:           amount,
       )
+    end
+
+    def neighborly_customer
+      @neighborly_customer ||= Neighborly::Balanced::Customer.new(@project.user, {})
     end
   end
 end
