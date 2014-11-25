@@ -62,10 +62,11 @@ module Neighborly::Balanced
         destination: bank_account,
       )
       ::Payout.create(
-        payment_service: 'balanced',
-        project_id:      @project.id,
-        user_id:         @requestor.id,
-        value:           amount,
+        bank_account_href: bank_account.href,
+        payment_service:   'balanced',
+        project_id:        @project.id,
+        user_id:           @requestor.id,
+        value:             amount,
       )
     end
 

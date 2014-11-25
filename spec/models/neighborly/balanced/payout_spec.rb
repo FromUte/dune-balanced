@@ -21,6 +21,9 @@ describe Neighborly::Balanced::Payout do
     )
   end
   let(:order) { double('Order', credit_to: nil) }
+  let(:bank_account) do
+    double('::Balanced::BankAccount', href: '/bank_accounts/foobar')
+  end
 
   describe "completion" do
     before do
@@ -33,7 +36,7 @@ describe Neighborly::Balanced::Payout do
         allow(Balanced::BankAccount).to receive(:find)
           .and_return(given_bank_account)
       end
-      let(:given_bank_account) { double('::Balanced::BankAccount') }
+      let(:given_bank_account) { bank_account }
       let(:bank_accounts) { [] }
 
       it 'credits the amount (in cents) to costumer\'s account' do
@@ -43,7 +46,7 @@ describe Neighborly::Balanced::Payout do
     end
 
     context "when customer already has a bank account" do
-      let(:bank_accounts) { [double('::Balanced::BankAccount')] }
+      let(:bank_accounts) { [bank_account] }
 
       it "credits the amount (in cents) to costumer's account" do
         expect(order).to receive(:credit_to).with(hash_including(amount: 9000))
