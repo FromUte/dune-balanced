@@ -32,7 +32,7 @@ module Neighborly::Balanced
     def credit_platform!
       to_be_credited =
         Balanced::Marketplace.mine.owner_customer.bank_accounts.first
-      credit!(to_be_credited, order.platform_fee)
+      credit!(to_be_credited, financials.platform_fee)
     end
 
     def order
