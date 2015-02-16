@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    neighborly-balanced (2.0.2)
+    dune-balanced (2.0.2)
       balanced (~> 1.1)
       draper (~> 1.3)
       faraday (= 0.8.9)
@@ -119,7 +119,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  neighborly-balanced!
+  dune-balanced!
   rspec-rails (~> 2.14)
   shoulda-matchers
   sqlite3 (~> 1.3)

@@ -1,5 +1,5 @@
 en:
-  neighborly:
+  dune:
     balanced:
       order:
         description: "Project #%{project_id} %{project_name}"

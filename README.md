@@ -1,10 +1,10 @@
-# Neighborly::Balanced
+# Dune::Balanced
 
-[![Build Status](https://travis-ci.org/neighborly/neighborly-balanced.png?branch=master)](https://travis-ci.org/neighborly/neighborly-balanced) [![Code Climate](https://codeclimate.com/github/neighborly/neighborly-balanced.png)](https://codeclimate.com/github/neighborly/neighborly-balanced)
+[![Build Status](https://travis-ci.org/dune/dune-balanced.png?branch=master)](https://travis-ci.org/dune/dune-balanced) [![Code Climate](https://codeclimate.com/github/dune/dune-balanced.png)](https://codeclimate.com/github/dune/dune-balanced)
 
 ## What
 
-This is an integration between [Balanced](https://www.balancedpayments.com/) and [Neighborl.y Donate](https://github.com/neighborly/neighborly-donate), a crowdfunding platform.
+This is an integration between [Balanced](https://www.balancedpayments.com/) and [Dune investement](https://github.com/FromUte/dune-investissement), a crowdfunding platform.
 
 ## How
 
@@ -12,7 +12,7 @@ Include this gem as dependency of your project, adding the following line in you
 
 ```ruby
 # Gemfile
-gem 'neighborly-balanced'
+gem 'dune-balanced'
 ```
 
 And install the migrations:
@@ -21,14 +21,14 @@ And install the migrations:
 $ bundle exec rake railties:install:migrations db:migrate
 ```
 
-Neighborly::Balanced is a Rails Engine, integrating with your (Neighbor.ly Donate) Rails application with very little of effort. To turn the engine on, mount it in an appropriate route:
+Dune::Balanced is a Rails Engine, integrating with your (dune-investissement) Rails application with very little of effort. To turn the engine on, mount it in an appropriate route:
 
 ```ruby
 # config/routes.rb
-mount Neighborly::Balanced::Engine => '/balanced/', as: :neighborly_balanced
+mount Dune::Balanced::Engine => '/balanced/', as: :dune_balanced
 ```
 
-As you might know, Neighborly has a `Configuration` class, responsible to... project's configuration. You need to set API key secret and Marketplace ID, and you find yours acessing settings of [Balanced Dashboard](https://dashboard.balancedpayments.com/). Also you need to inform how the debit will appears on the statement.
+As you might know, Dune has a `Configuration` class, responsible to... project's configuration. You need to set API key secret and Marketplace ID, and you find yours acessing settings of [Balanced Dashboard](https://dashboard.balancedpayments.com/). Also you need to inform how the debit will appears on the statement.
 
 ```console
 $ rails runner "Configuration.create!(name: 'balanced_api_key_secret', value: 'YOUR_API_KEY_SECRET_HERE')"
@@ -40,7 +40,7 @@ $ rails runner "Configuration.create!(name: 'balanced_appears_on_statement_as', 
 
 Balanced has a webhook that allow us to receive notifications of events that happen there. We execute a few things when certain events occurs, so you need to add on [Balanced Settings](https://dashboard.balancedpayments.com) the webhook with the following URL:
 
-`http://my-neighborly.com/balanced/notifications`
+`http://my-dune.com/balanced/notifications`
 
 ## Contributing
 
